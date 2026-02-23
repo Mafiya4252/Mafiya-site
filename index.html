@@ -1077,7 +1077,7 @@ body {
   <div class="auth-left">
     <span class="auth-logo">CYBER</span>
   </div>
-  <div class="auth-right" id="authButtons">
+  <div class="auth-right">
     <a href="login.html" class="auth-btn">LOGIN</a>
     <a href="signup.html" class="auth-btn signup">SIGN UP</a>
   </div>
@@ -1156,19 +1156,31 @@ body {
   </a>
   <a href="/Projects" class="cyber-menu-item">
     <span class="icon">🚀</span>
-    <span>PROJECTS</span>
+    <span>My-PROJECTS</span>
   </a>
-  <a href="/Webapps" class="cyber-menu-item">
+  <a href="/powerfull-projects" class="cyber-menu-item">
     <span class="icon">🌐</span>
-    <span>WEB APPS</span>
+    <span>POWERFULL PROJECTS</span>
+  </a>
+    <a href="/AI-UNIVERSE" class="cyber-menu-item">
+   <span class="icon">🧬</span>
+      <span>AI UNIVERSE</span>
+  </a>
+ <a href="/connect-us" class="cyber-menu-item">
+   <span class="icon">📧</span>
+      <span>CONNECT US</span>
+  </a>
+ <a href="/Infomations" class="cyber-menu-item">
+   <span class="icon">📜</span>
+      <span>SITE STRUCTURE</span>
   </a>
   <a href="/Services" class="cyber-menu-item">
-    <span class="icon">⚙️</span>
+    <span class="icon">️🛒</span>
     <span>SERVICES</span>
   </a>
-  <a href="/Contact" class="cyber-menu-item">
-    <span class="icon">📧</span>
-    <span>CONTACT</span>
+  <a href="/Settings" class="cyber-menu-item">
+    <span class="icon">⚙️</span>
+    <span>SETTINGS</span>
   </a>
 </div>
 
@@ -1191,27 +1203,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const version = document.getElementById("version");
   const menuBtn = document.getElementById("menuBtn");
   const menuPanel = document.getElementById("menuPanel");
-  const authButtons = document.getElementById("authButtons");
-
-  // Check login status from localStorage
-  function checkLoginStatus() {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    if (isLoggedIn) {
-      authButtons.style.display = 'none';
-    } else {
-      authButtons.style.display = 'flex';
-    }
-  }
-  
-  // Initial check
-  checkLoginStatus();
-
-  // Optional: Listen for storage changes (if login happens in another tab)
-  window.addEventListener('storage', function(e) {
-    if (e.key === 'isLoggedIn') {
-      checkLoginStatus();
-    }
-  });
 
   /* MENU */
   menuBtn.onclick = (e) => {
@@ -1441,4 +1432,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 </body>
-</html>
+  </html>
