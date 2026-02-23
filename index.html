@@ -1430,6 +1430,37 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+  function checkLoginStatus() {
+  const authButtons = document.getElementById("authButtons");
+  
+  // localStorage එක check කරන්න
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  
+  if (isLoggedIn) {
+    // Logged in නම් buttons hide කරන්න
+    authButtons.style.display = 'none';
+  } else {
+    // Logged in නැත්නම් buttons පෙන්වන්න
+    authButtons.style.display = 'flex';
+  }
+}
+
+// Listen for storage changes (login වෙනත් tab එකක සිදු වුනොත්)
+window.addEventListener('storage', function(e) {
+  if (e.key === 'isLoggedIn') {
+    checkLoginStatus();
+  }
+});
+
+// Page එක load වෙද්දි check කරන්න
+document.addEventListener("DOMContentLoaded", function() {
+  checkLoginStatus();
+  
+  // අනික් කෝඩ් ටික...
+  // (ඔයාගේ existing code එක)
+});
+
+
 </script>
 </body>
   </html>
