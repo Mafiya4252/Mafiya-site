@@ -662,6 +662,50 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
 
     <script>
+
+// FIX: Force check both storages and fix data
+(function() {
+    console.log('🔧 Account page initializing...');
+    
+    // Try to get user from both storages
+    let userData = null;
+    let isLoggedIn = false;
+    
+    // Check localStorage
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+        isLoggedIn = true;
+        try {
+            userData = JSON.parse(localStorage.getItem('cyber_user'));
+            console.log('✅ Found user in localStorage:', userData);
+        } catch(e) {
+            console.log('❌ Error parsing localStorage user');
+        }
+    }
+    
+    // Check sessionStorage if not found
+    if (!userData && sessionStorage.getItem('isLoggedIn') === 'true') {
+        isLoggedIn = true;
+        try {
+            userData = JSON.parse(sessionStorage.getItem('cyber_user'));
+            console.log('✅ Found user in sessionStorage:', userData);
+            
+            // Copy to localStorage for consistency
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('cyber_user', JSON.stringify(userData));
+        } catch(e) {
+            console.log('❌ Error parsing sessionStorage user');
+        }
+    }
+    
+    // If no user found, redirect to login
+    if (!userData) {
+        console.log('❌ No user found, redirecting to login...');
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    console.log('✅ Account initialization complete');
+})();
         // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDW-hB0B-sdrIGI7Uf0Pl2CgfIV5R4X9hY",
