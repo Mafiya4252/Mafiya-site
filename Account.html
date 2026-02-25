@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ CYBER ACCOUNT ⚡</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00ff88;
+            --secondary: #00aaff;
+            --accent: #ff00ff;
+            --danger: #ff5555;
+            --warning: #ffaa00;
+            --bg: #0a0a1a;
+            --bg-light: #0f172a;
+            --card-bg: rgba(15, 20, 35, 0.85);
+            --text: #f0f0fc;
+            --glow: 0 0 15px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ===== CYBER BACKGROUND ===== */
+        .cyber-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 136, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(0, 170, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+            animation: bgPulse 10s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            opacity: 0.3;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(40px); }
+        }
+
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), var(--accent), transparent);
+            animation: scanMove 4s linear infinite;
+            z-index: 9999;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        @keyframes scanMove {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glitch-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #00ff88, #00aaff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 300% 300%;
+            animation: gradientFlow 5s ease infinite;
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .tagline {
+            font-size: 1rem;
+            color: var(--secondary);
+            letter-spacing: 2px;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0.5rem;
+        }
+
+        /* ===== LOGIN CHECK ===== */
+        .login-check {
+            text-align: center;
+            padding: 3rem;
+            background: var(--card-bg);
+            border-radius: 30px;
+            border: 1px solid var(--primary);
+            margin: 2rem 0;
+        }
+
+        .login-check i {
+            font-size: 4rem;
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+
+        .login-check h2 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 1rem;
+        }
+
+        .login-check p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        .login-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            color: #000;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        /* ===== ACCOUNT CARD ===== */
+        .account-card {
+            background: var(--card-bg);
+            border-radius: 30px;
+            border: 1px solid var(--primary);
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .account-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .account-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .account-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #000;
+            font-weight: 700;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 30px var(--primary);
+        }
+
+        .account-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .account-title small {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            display: block;
+        }
+
+        /* ===== ACCOUNT INFO ===== */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .info-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .info-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            color: white;
+            word-break: break-all;
+        }
+
+        .edit-btn {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.3rem 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .edit-btn:hover {
+            background: var(--primary);
+            color: #000;
+        }
+
+        /* ===== EDIT MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            animation: modalAppear 0.3s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--primary);
+            border-radius: 15px;
+            color: white;
+            font-size: 1rem;
+            margin: 1rem 0;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .save-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: #000;
+        }
+
+        .cancel-btn {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .save-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .cancel-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* ===== TERMINAL ===== */
+        .terminal-container {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 1px solid var(--primary);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .terminal-title {
+            color: var(--primary);
+            font-size: 0.8rem;
+        }
+
+        .terminal-output {
+            color: var(--primary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 20px;
+            background-color: var(--primary);
+            margin-left: 5px;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, var(--danger), #ff0000);
+            color: white;
+        }
+
+        .dashboard-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: #000;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(0, 255, 136, 0.3);
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+        }
+
+        .footer-glow {
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), var(--accent), transparent);
+            animation: footerGlow 3s infinite;
+        }
+
+        @keyframes footerGlow {
+            0%, 100% { width: 200px; opacity: 0.5; }
+            50% { width: 300px; opacity: 1; }
+        }
+
+        /* ===== CURSOR GLOW ===== */
+        .cursor-glow {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary);
+            filter: blur(15px);
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.2;
+            mix-blend-mode: screen;
+        }
+
+        /* ===== LOADER ===== */
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(0, 255, 136, 0.2);
+            border-top: 4px solid var(--primary);
+            border-right: 4px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .glitch-title { font-size: 2rem; }
+            .account-header { flex-direction: column; text-align: center; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="cyber-bg"></div>
+    <div class="grid-overlay"></div>
+    <div class="scan-line"></div>
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="glitch-title">ACCOUNT DASHBOARD</h1>
+            <p class="tagline">// MANAGE YOUR PROFILE //</p>
+        </header>
+
+        <!-- Account Content -->
+        <div id="accountContent"></div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-glow"></div>
+            <div>
+                <i class="fas fa-code"></i>
+                <span>CYBER ACCOUNT SYSTEM</span>
+            </div>
+            <div style="margin-top: 1rem; color: rgba(255, 255, 255, 0.6); font-size: 0.8rem;">
+                © 2026 | SECURE • PRIVATE • CYBER
+            </div>
+        </footer>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modalTitle">EDIT FIELD</h3>
+            <input type="text" id="modalInput" class="modal-input" placeholder="Enter new value">
+            <input type="password" id="modalPassword" class="modal-input" style="display: none;" placeholder="Enter new password">
+            <div class="modal-buttons">
+                <button class="modal-btn save-btn" id="saveBtn">SAVE</button>
+                <button class="modal-btn cancel-btn" onclick="closeModal()">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+
+    <script>
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDW-hB0B-sdrIGI7Uf0Pl2CgfIV5R4X9hY",
+            authDomain: "mafiya-new-data-base.firebaseapp.com",
+            projectId: "mafiya-new-data-base",
+            storageBucket: "mafiya-new-data-base.firebasestorage.app",
+            messagingSenderId: "87239991760",
+            appId: "1:87239991760:web:89ca5f8e07ffb8f8fb19d5",
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Cursor glow
+        const cursor = document.getElementById('cursorGlow');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 15 + 'px';
+            cursor.style.top = e.clientY - 15 + 'px';
+        });
+
+        // Random glitch
+        setInterval(() => {
+            if (Math.random() > 0.95) {
+                document.body.style.animation = 'glitch 0.2s';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 200);
+            }
+        }, 3000);
+
+        // Glitch animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes glitch {
+                0% { transform: translate(0); }
+                20% { transform: translate(-2px, 2px); }
+                40% { transform: translate(2px, -2px); }
+                60% { transform: translate(-2px, -2px); }
+                80% { transform: translate(2px, 2px); }
+                100% { transform: translate(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Global variables
+        let currentUser = null;
+        let currentField = '';
+        let userDocRef = null;
+
+        // Terminal output
+        function terminalOutput(message) {
+            const terminal = document.getElementById('terminal');
+            if (terminal) {
+                terminal.innerHTML = `> ${message}<span class="cursor"></span>`;
+            }
+        }
+
+        // Check login status
+        function checkLogin() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userData = localStorage.getItem('cyber_user');
+            
+            const content = document.getElementById('accountContent');
+            
+            if (!isLoggedIn || !userData) {
+                content.innerHTML = `
+                    <div class="login-check">
+                        <i class="fas fa-lock"></i>
+                        <h2>ACCESS DENIED</h2>
+                        <p>Please login to view your account details</p>
+                        <a href="login.html" class="login-btn">
+                            <i class="fas fa-sign-in-alt"></i> GO TO LOGIN
+                        </a>
+                    </div>
+                `;
+                return false;
+            }
+            
+            currentUser = JSON.parse(userData);
+            return true;
+        }
+
+        // Load user data from Firebase
+        async function loadUserData() {
+            const content = document.getElementById('accountContent');
+            content.innerHTML = `
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+            `;
+
+            try {
+                // Query Firestore for user
+                const usersRef = db.collection('users');
+                const snapshot = await usersRef.where('email', '==', currentUser.email).get();
+
+                if (snapshot.empty) {
+                    throw new Error('User not found in database');
+                }
+
+                // Get user document
+                const userDoc = snapshot.docs[0];
+                userDocRef = userDoc.ref;
+                const userData = userDoc.data();
+
+                // Update localStorage with latest data
+                const updatedUser = {
+                    email: userData.email,
+                    username: userData.username,
+                    verified: userData.verified
+                };
+                localStorage.setItem('cyber_user', JSON.stringify(updatedUser));
+                currentUser = updatedUser;
+
+                // Display account info
+                content.innerHTML = `
+                    <div class="account-card">
+                        <div class="account-header">
+                            <div class="account-avatar">
+                                ${userData.username.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <h2 class="account-title">
+                                    ${userData.username}
+                                    <small>${userData.verified ? '✓ VERIFIED' : '⏳ PENDING'}</small>
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-user"></i> USERNAME
+                                    <button class="edit-btn" onclick="openEditModal('username', '${userData.username}')">
+                                        <i class="fas fa-edit"></i> EDIT
+                                    </button>
+                                </div>
+                                <div class="info-value" id="display-username">${userData.username}</div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-envelope"></i> EMAIL
+                                    <button class="edit-btn" onclick="openEditModal('email', '${userData.email}')">
+                                        <i class="fas fa-edit"></i> EDIT
+                                    </button>
+                                </div>
+                                <div class="info-value" id="display-email">${userData.email}</div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-lock"></i> PASSWORD
+                                    <button class="edit-btn" onclick="openEditModal('password', '')">
+                                        <i class="fas fa-edit"></i> CHANGE
+                                    </button>
+                                </div>
+                                <div class="info-value">••••••••</div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-calendar"></i> ACCOUNT STATUS
+                                </div>
+                                <div class="info-value">
+                                    <span style="color: ${userData.verified ? 'var(--primary)' : 'var(--warning)'}">
+                                        ${userData.verified ? 'ACTIVE' : 'PENDING VERIFICATION'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="terminal-container">
+                            <div class="terminal-header">
+                                <div class="terminal-dots">
+                                    <div class="terminal-dot dot-red"></div>
+                                    <div class="terminal-dot dot-yellow"></div>
+                                    <div class="terminal-dot dot-green"></div>
+                                </div>
+                                <div class="terminal-title">SYSTEM TERMINAL</div>
+                            </div>
+                            <div class="terminal-output" id="terminal">> ACCOUNT LOADED SUCCESSFULLY<span class="cursor"></span></div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn dashboard-btn" onclick="window.location.href='dashboard.html'">
+                                <i class="fas fa-tachometer-alt"></i> DASHBOARD
+                            </button>
+                            <button class="action-btn logout-btn" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i> LOGOUT
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                terminalOutput('ACCOUNT DATA SYNCED WITH FIREBASE');
+
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                content.innerHTML = `
+                    <div class="login-check">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>
+                        <h2>ERROR LOADING DATA</h2>
+                        <p>${error.message}</p>
+                        <button onclick="location.reload()" class="login-btn">
+                            <i class="fas fa-sync"></i> TRY AGAIN
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Modal functions
+        function openEditModal(field, currentValue) {
+            currentField = field;
+            const modal = document.getElementById('editModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalInput = document.getElementById('modalInput');
+            const modalPassword = document.getElementById('modalPassword');
+
+            if (field === 'password') {
+                modalTitle.textContent = 'CHANGE PASSWORD';
+                modalInput.style.display = 'none';
+                modalPassword.style.display = 'block';
+                modalPassword.value = '';
+            } else {
+                modalTitle.textContent = `EDIT ${field.toUpperCase()}`;
+                modalInput.style.display = 'block';
+                modalPassword.style.display = 'none';
+                modalInput.value = currentValue;
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
+
+        // Save changes
+        document.getElementById('saveBtn').addEventListener('click', async () => {
+            if (!userDocRef) return;
+
+            const modal = document.getElementById('editModal');
+            const newValue = currentField === 'password' 
+                ? document.getElementById('modalPassword').value 
+                : document.getElementById('modalInput').value;
+
+            if (!newValue) {
+                alert('Please enter a value');
+                return;
+            }
+
+            terminalOutput('UPDATING DATABASE...');
+
+            try {
+                const updateData = {};
+                
+                if (currentField === 'password') {
+                    updateData.password = newValue;
+                } else if (currentField === 'username') {
+                    updateData.username = newValue;
+                } else if (currentField === 'email') {
+                    // Check if email already exists
+                    const usersRef = db.collection('users');
+                    const snapshot = await usersRef.where('email', '==', newValue).get();
+                    
+                    if (!snapshot.empty && snapshot.docs[0].id !== userDocRef.id) {
+                        throw new Error('Email already in use');
+                    }
+                    updateData.email = newValue;
+                }
+
+                // Update Firestore
+                await userDocRef.update(updateData);
+
+                // Update localStorage
+                const updatedUser = { ...currentUser, ...updateData };
+                localStorage.setItem('cyber_user', JSON.stringify(updatedUser));
+                currentUser = updatedUser;
+
+                // Update display
+                if (currentField === 'username') {
+                    document.getElementById('display-username').textContent = newValue;
+                    document.querySelector('.account-avatar').textContent = newValue.charAt(0).toUpperCase();
+                } else if (currentField === 'email') {
+                    document.getElementById('display-email').textContent = newValue;
+                }
+
+                terminalOutput(`${currentField.toUpperCase()} UPDATED SUCCESSFULLY`);
+                closeModal();
+
+            } catch (error) {
+                console.error('Update error:', error);
+                terminalOutput(`ERROR: ${error.message}`);
+                alert('Error updating: ' + error.message);
+            }
+        });
+
+        // Logout function
+        window.logout = function() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('cyber_user');
+            window.location.href = 'login.html';
+        };
+
+        // Initialize
+        window.onload = async () => {
+            if (checkLogin()) {
+                await loadUserData();
+            }
+        };
+
+        // Console art
+        console.log('%c⚡ CYBER ACCOUNT SYSTEM ⚡', 'color: #00ff88; font-size: 16px; font-family: Orbitron; font-weight: bold;');
+    </script>
+</body>
+  </html>
