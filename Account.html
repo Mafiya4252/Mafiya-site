@@ -239,6 +239,8 @@
             gap: 1.5rem;
             margin-bottom: 2rem;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
         }
 
         .account-avatar {
@@ -323,6 +325,16 @@
         .edit-btn:hover {
             background: var(--primary);
             color: #000;
+        }
+
+        .verified-badge {
+            color: var(--primary);
+            margin-left: 0.5rem;
+        }
+
+        .unverified-badge {
+            color: var(--warning);
+            margin-left: 0.5rem;
         }
 
         /* ===== EDIT MODAL ===== */
@@ -435,6 +447,8 @@
             margin: 2rem 0;
             border: 1px solid var(--primary);
             font-family: 'Fira Code', monospace;
+            position: relative;
+            z-index: 2;
         }
 
         .terminal-header {
@@ -471,6 +485,7 @@
             font-size: 0.9rem;
             line-height: 1.6;
             white-space: pre-wrap;
+            min-height: 60px;
         }
 
         .cursor {
@@ -495,6 +510,8 @@
             justify-content: center;
             margin-top: 2rem;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
         }
 
         .action-btn {
@@ -703,14 +720,23 @@
             }
         }
 
-        // Check login status
+        // Check login status from BOTH localStorage and sessionStorage
         function checkLogin() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const userData = localStorage.getItem('cyber_user');
+            // Check both storages (login page uses sessionStorage, signup uses localStorage)
+            const localLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const sessionLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+            
+            let userData = null;
+            
+            if (localLoggedIn) {
+                userData = localStorage.getItem('cyber_user');
+            } else if (sessionLoggedIn) {
+                userData = sessionStorage.getItem('cyber_user');
+            }
             
             const content = document.getElementById('accountContent');
             
-            if (!isLoggedIn || !userData) {
+            if (!userData) {
                 content.innerHTML = `
                     <div class="login-check">
                         <i class="fas fa-lock"></i>
@@ -724,8 +750,24 @@
                 return false;
             }
             
-            currentUser = JSON.parse(userData);
-            return true;
+            try {
+                currentUser = JSON.parse(userData);
+                console.log('User data loaded:', currentUser);
+                return true;
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+                content.innerHTML = `
+                    <div class="login-check">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>
+                        <h2>DATA ERROR</h2>
+                        <p>Please login again</p>
+                        <a href="login.html" class="login-btn">
+                            <i class="fas fa-sign-in-alt"></i> GO TO LOGIN
+                        </a>
+                    </div>
+                `;
+                return false;
+            }
         }
 
         // Load user data from Firebase
@@ -738,39 +780,41 @@
             `;
 
             try {
-                // Query Firestore for user
+                console.log('Searching for user with email:', currentUser.email);
+                
+                // Query Firestore for user by email
                 const usersRef = db.collection('users');
                 const snapshot = await usersRef.where('email', '==', currentUser.email).get();
 
                 if (snapshot.empty) {
-                    throw new Error('User not found in database');
+                    console.error('No user found with email:', currentUser.email);
+                    throw new Error('User not found in database. Please sign up again.');
                 }
 
                 // Get user document
                 const userDoc = snapshot.docs[0];
                 userDocRef = userDoc.ref;
                 const userData = userDoc.data();
+                
+                console.log('User data from Firebase:', userData);
 
-                // Update localStorage with latest data
-                const updatedUser = {
-                    email: userData.email,
-                    username: userData.username,
-                    verified: userData.verified
-                };
-                localStorage.setItem('cyber_user', JSON.stringify(updatedUser));
-                currentUser = updatedUser;
+                // Check verification status
+                const isVerified = userData.verified === true;
 
                 // Display account info
                 content.innerHTML = `
                     <div class="account-card">
                         <div class="account-header">
                             <div class="account-avatar">
-                                ${userData.username.charAt(0).toUpperCase()}
+                                ${userData.username ? userData.username.charAt(0).toUpperCase() : 'U'}
                             </div>
                             <div>
                                 <h2 class="account-title">
-                                    ${userData.username}
-                                    <small>${userData.verified ? '✓ VERIFIED' : '⏳ PENDING'}</small>
+                                    ${userData.username || 'User'}
+                                    ${isVerified ? 
+                                        '<small class="verified-badge"><i class="fas fa-check-circle"></i> VERIFIED</small>' : 
+                                        '<small class="unverified-badge"><i class="fas fa-clock"></i> PENDING VERIFICATION</small>'
+                                    }
                                 </h2>
                             </div>
                         </div>
@@ -779,21 +823,21 @@
                             <div class="info-item">
                                 <div class="info-label">
                                     <i class="fas fa-user"></i> USERNAME
-                                    <button class="edit-btn" onclick="openEditModal('username', '${userData.username}')">
+                                    <button class="edit-btn" onclick="openEditModal('username', '${userData.username || ''}')">
                                         <i class="fas fa-edit"></i> EDIT
                                     </button>
                                 </div>
-                                <div class="info-value" id="display-username">${userData.username}</div>
+                                <div class="info-value" id="display-username">${userData.username || 'Not set'}</div>
                             </div>
 
                             <div class="info-item">
                                 <div class="info-label">
                                     <i class="fas fa-envelope"></i> EMAIL
-                                    <button class="edit-btn" onclick="openEditModal('email', '${userData.email}')">
+                                    <button class="edit-btn" onclick="openEditModal('email', '${userData.email || ''}')">
                                         <i class="fas fa-edit"></i> EDIT
                                     </button>
                                 </div>
-                                <div class="info-value" id="display-email">${userData.email}</div>
+                                <div class="info-value" id="display-email">${userData.email || 'Not set'}</div>
                             </div>
 
                             <div class="info-item">
@@ -811,8 +855,9 @@
                                     <i class="fas fa-calendar"></i> ACCOUNT STATUS
                                 </div>
                                 <div class="info-value">
-                                    <span style="color: ${userData.verified ? 'var(--primary)' : 'var(--warning)'}">
-                                        ${userData.verified ? 'ACTIVE' : 'PENDING VERIFICATION'}
+                                    <span style="color: ${isVerified ? 'var(--primary)' : 'var(--warning)'}">
+                                        ${isVerified ? 'ACTIVE' : 'PENDING VERIFICATION'}
+                                        ${userData.otp ? ' (OTP not verified)' : ''}
                                     </span>
                                 </div>
                             </div>
@@ -831,8 +876,8 @@
                         </div>
 
                         <div class="action-buttons">
-                            <button class="action-btn dashboard-btn" onclick="window.location.href='dashboard.html'">
-                                <i class="fas fa-tachometer-alt"></i> DASHBOARD
+                            <button class="action-btn dashboard-btn" onclick="window.location.href='index.html'">
+                                <i class="fas fa-home"></i> HOME
                             </button>
                             <button class="action-btn logout-btn" onclick="logout()">
                                 <i class="fas fa-sign-out-alt"></i> LOGOUT
@@ -859,7 +904,7 @@
         }
 
         // Modal functions
-        function openEditModal(field, currentValue) {
+        window.openEditModal = function(field, currentValue) {
             currentField = field;
             const modal = document.getElementById('editModal');
             const modalTitle = document.getElementById('modalTitle');
@@ -881,13 +926,16 @@
             modal.classList.add('active');
         }
 
-        function closeModal() {
+        window.closeModal = function() {
             document.getElementById('editModal').classList.remove('active');
         }
 
         // Save changes
         document.getElementById('saveBtn').addEventListener('click', async () => {
-            if (!userDocRef) return;
+            if (!userDocRef) {
+                alert('No user document reference found');
+                return;
+            }
 
             const modal = document.getElementById('editModal');
             const newValue = currentField === 'password' 
@@ -914,18 +962,25 @@
                     const snapshot = await usersRef.where('email', '==', newValue).get();
                     
                     if (!snapshot.empty && snapshot.docs[0].id !== userDocRef.id) {
-                        throw new Error('Email already in use');
+                        throw new Error('Email already in use by another account');
                     }
                     updateData.email = newValue;
                 }
 
                 // Update Firestore
                 await userDocRef.update(updateData);
+                console.log('Firestore updated:', updateData);
 
-                // Update localStorage
-                const updatedUser = { ...currentUser, ...updateData };
-                localStorage.setItem('cyber_user', JSON.stringify(updatedUser));
-                currentUser = updatedUser;
+                // Update user data in both storages
+                const userData = {
+                    email: currentField === 'email' ? newValue : currentUser.email,
+                    username: currentField === 'username' ? newValue : currentUser.username,
+                    verified: currentUser.verified
+                };
+                
+                localStorage.setItem('cyber_user', JSON.stringify(userData));
+                sessionStorage.setItem('cyber_user', JSON.stringify(userData));
+                currentUser = userData;
 
                 // Update display
                 if (currentField === 'username') {
@@ -949,12 +1004,16 @@
         window.logout = function() {
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('cyber_user');
+            sessionStorage.removeItem('isLoggedIn');
+            sessionStorage.removeItem('cyber_user');
             window.location.href = 'login.html';
         };
 
         // Initialize
         window.onload = async () => {
+            console.log('Page loaded, checking login...');
             if (checkLogin()) {
+                console.log('Login check passed, loading user data...');
                 await loadUserData();
             }
         };
@@ -963,4 +1022,4 @@
         console.log('%c⚡ CYBER ACCOUNT SYSTEM ⚡', 'color: #00ff88; font-size: 16px; font-family: Orbitron; font-weight: bold;');
     </script>
 </body>
-  </html>
+</html>
