@@ -22,10 +22,8 @@
             --danger: #ff5555;
             --warning: #ffaa00;
             --bg: #0a0a1a;
-            --bg-light: #0f172a;
             --card-bg: rgba(15, 20, 35, 0.85);
             --text: #f0f0fc;
-            --glow: 0 0 15px;
         }
 
         body {
@@ -37,7 +35,7 @@
             overflow-x: hidden;
         }
 
-        /* ===== CYBER BACKGROUND ===== */
+        /* ===== BACKGROUND EFFECTS ===== */
         .cyber-bg {
             position: fixed;
             top: 0;
@@ -569,20 +567,6 @@
             50% { width: 300px; opacity: 1; }
         }
 
-        /* ===== CURSOR GLOW ===== */
-        .cursor-glow {
-            position: fixed;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: var(--primary);
-            filter: blur(15px);
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.2;
-            mix-blend-mode: screen;
-        }
-
         /* ===== LOADER ===== */
         .loader-container {
             display: flex;
@@ -606,7 +590,20 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* ===== RESPONSIVE ===== */
+        /* ===== CURSOR GLOW ===== */
+        .cursor-glow {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary);
+            filter: blur(15px);
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.2;
+            mix-blend-mode: screen;
+        }
+
         @media (max-width: 768px) {
             .glitch-title { font-size: 2rem; }
             .account-header { flex-direction: column; text-align: center; }
@@ -622,16 +619,13 @@
     <div class="cursor-glow" id="cursorGlow"></div>
 
     <div class="container">
-        <!-- Header -->
         <header class="header">
             <h1 class="glitch-title">ACCOUNT DASHBOARD</h1>
             <p class="tagline">// MANAGE YOUR PROFILE //</p>
         </header>
 
-        <!-- Account Content -->
         <div id="accountContent"></div>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="footer-glow"></div>
             <div>
@@ -662,50 +656,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
 
     <script>
-
-// FIX: Force check both storages and fix data
-(function() {
-    console.log('🔧 Account page initializing...');
-    
-    // Try to get user from both storages
-    let userData = null;
-    let isLoggedIn = false;
-    
-    // Check localStorage
-    if (localStorage.getItem('isLoggedIn') === 'true') {
-        isLoggedIn = true;
-        try {
-            userData = JSON.parse(localStorage.getItem('cyber_user'));
-            console.log('✅ Found user in localStorage:', userData);
-        } catch(e) {
-            console.log('❌ Error parsing localStorage user');
-        }
-    }
-    
-    // Check sessionStorage if not found
-    if (!userData && sessionStorage.getItem('isLoggedIn') === 'true') {
-        isLoggedIn = true;
-        try {
-            userData = JSON.parse(sessionStorage.getItem('cyber_user'));
-            console.log('✅ Found user in sessionStorage:', userData);
-            
-            // Copy to localStorage for consistency
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('cyber_user', JSON.stringify(userData));
-        } catch(e) {
-            console.log('❌ Error parsing sessionStorage user');
-        }
-    }
-    
-    // If no user found, redirect to login
-    if (!userData) {
-        console.log('❌ No user found, redirecting to login...');
-        window.location.href = 'login.html';
-        return;
-    }
-    
-    console.log('✅ Account initialization complete');
-})();
         // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDW-hB0B-sdrIGI7Uf0Pl2CgfIV5R4X9hY",
@@ -727,30 +677,6 @@
             cursor.style.top = e.clientY - 15 + 'px';
         });
 
-        // Random glitch
-        setInterval(() => {
-            if (Math.random() > 0.95) {
-                document.body.style.animation = 'glitch 0.2s';
-                setTimeout(() => {
-                    document.body.style.animation = '';
-                }, 200);
-            }
-        }, 3000);
-
-        // Glitch animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes glitch {
-                0% { transform: translate(0); }
-                20% { transform: translate(-2px, 2px); }
-                40% { transform: translate(2px, -2px); }
-                60% { transform: translate(-2px, -2px); }
-                80% { transform: translate(2px, 2px); }
-                100% { transform: translate(0); }
-            }
-        `;
-        document.head.appendChild(style);
-
         // Global variables
         let currentUser = null;
         let currentField = '';
@@ -764,23 +690,14 @@
             }
         }
 
-        // Check login status from BOTH localStorage and sessionStorage
+        // Check login status from localStorage ONLY (since both signup and login use localStorage)
         function checkLogin() {
-            // Check both storages (login page uses sessionStorage, signup uses localStorage)
-            const localLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const sessionLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-            
-            let userData = null;
-            
-            if (localLoggedIn) {
-                userData = localStorage.getItem('cyber_user');
-            } else if (sessionLoggedIn) {
-                userData = sessionStorage.getItem('cyber_user');
-            }
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userData = localStorage.getItem('cyber_user');
             
             const content = document.getElementById('accountContent');
             
-            if (!userData) {
+            if (!isLoggedIn || !userData) {
                 content.innerHTML = `
                     <div class="login-check">
                         <i class="fas fa-lock"></i>
@@ -796,7 +713,7 @@
             
             try {
                 currentUser = JSON.parse(userData);
-                console.log('User data loaded:', currentUser);
+                console.log('User data from localStorage:', currentUser);
                 return true;
             } catch (e) {
                 console.error('Error parsing user data:', e);
@@ -901,7 +818,6 @@
                                 <div class="info-value">
                                     <span style="color: ${isVerified ? 'var(--primary)' : 'var(--warning)'}">
                                         ${isVerified ? 'ACTIVE' : 'PENDING VERIFICATION'}
-                                        ${userData.otp ? ' (OTP not verified)' : ''}
                                     </span>
                                 </div>
                             </div>
@@ -1015,16 +931,18 @@
                 await userDocRef.update(updateData);
                 console.log('Firestore updated:', updateData);
 
-                // Update user data in both storages
-                const userData = {
+                // Update user data in localStorage
+                const updatedUser = {
                     email: currentField === 'email' ? newValue : currentUser.email,
                     username: currentField === 'username' ? newValue : currentUser.username,
                     verified: currentUser.verified
                 };
                 
-                localStorage.setItem('cyber_user', JSON.stringify(userData));
-                sessionStorage.setItem('cyber_user', JSON.stringify(userData));
-                currentUser = userData;
+                localStorage.setItem('cyber_user', JSON.stringify(updatedUser));
+                // Also update sessionStorage if needed
+                sessionStorage.setItem('cyber_user', JSON.stringify(updatedUser));
+                
+                currentUser = updatedUser;
 
                 // Update display
                 if (currentField === 'username') {
@@ -1048,22 +966,18 @@
         window.logout = function() {
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('cyber_user');
-            sessionStorage.removeItem('isLoggedIn');
             sessionStorage.removeItem('cyber_user');
             window.location.href = 'login.html';
         };
 
         // Initialize
         window.onload = async () => {
-            console.log('Page loaded, checking login...');
+            console.log('Account page loaded');
             if (checkLogin()) {
                 console.log('Login check passed, loading user data...');
                 await loadUserData();
             }
         };
-
-        // Console art 🤫🧬
-        console.log('%c⚡ CYBER ACCOUNT SYSTEM ⚡', 'color: #00ff88; font-size: 16px; font-family: Orbitron; font-weight: bold;');
     </script>
 </body>
 </html>
