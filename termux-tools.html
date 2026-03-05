@@ -562,14 +562,14 @@
     <div class="container">
         <!-- Header -->
         <header class="header">
-            <h1 class="glitch-title">TERMUX TOOLS • EVIL</h1>
+            <h1 class="glitch-title">TERMUX TOOLS • EVIL EYE</h1>
             <p class="tagline">// BLOODSHED COLLECTION //</p>
             <a href="powerfullProjects.html" class="back-btn">
                 <i class="fas fa-arrow-left"></i> BACK TO PROJECTS
             </a>
         </header>
 
-        <!-- Tools Grid -->
+        <!-- Tools Grid (now 3 cards) -->
         <div class="tools-grid">
             <!-- DevilX Tool -->
             <div class="tool-card">
@@ -742,12 +742,92 @@
                     </div>
                 </div>
             </div>
+
+            <!-- NEW: EVIL EYE THEME Tool (exactly as requested) -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h2 class="tool-title">EVIL EYE <small>theme</small></h2>
+                </div>
+
+                <div class="tool-description">
+                    <i class="fas fa-info-circle" style="color: #ff5e5e;"></i>
+                    👁️ Termux-Theme by WhiteSoulEvLF. Transform your Termux with an evil eye theme. Follow the steps below to install the dark, eye-themed style.
+                </div>
+
+                <!-- Quick Install -->
+                <button class="install-all" onclick="copyAllEvilEye()">
+                    <i class="fas fa-copy"></i> COPY ALL COMMANDS
+                </button>
+
+                <!-- Step by Step (exact requested commands) -->
+                <div class="steps-container">
+                    <div class="step-item" onclick="copyCommand('apt update && apt upgrade')">
+                        <span class="step-number">1</span>
+                        <span class="step-command">apt update && apt upgrade</span>
+                        <span class="step-copy"><i class="fas fa-copy"></i></span>
+                    </div>
+                    <div class="step-item" onclick="copyCommand('pkg install python')">
+                        <span class="step-number">2</span>
+                        <span class="step-command">pkg install python</span>
+                        <span class="step-copy"><i class="fas fa-copy"></i></span>
+                    </div>
+                    <div class="step-item" onclick="copyCommand('pkg install git')">
+                        <span class="step-number">3</span>
+                        <span class="step-command">pkg install git</span>
+                        <span class="step-copy"><i class="fas fa-copy"></i></span>
+                    </div>
+                    <div class="step-item" onclick="copyCommand('git clone https://github.com/WhiteSoulEvLF/Termux-Theme.git')">
+                        <span class="step-number">4</span>
+                        <span class="step-command">git clone https://github.com/WhiteSoulEvLF/Termux-Theme.git</span>
+                        <span class="step-copy"><i class="fas fa-copy"></i></span>
+                    </div>
+                    <div class="step-item" onclick="copyCommand('cd Termux-Theme')">
+                        <span class="step-number">5</span>
+                        <span class="step-command">cd Termux-Theme</span>
+                        <span class="step-copy"><i class="fas fa-copy"></i></span>
+                    </div>
+                    <div class="step-item" onclick="copyCommand('bash Requirements.sh')">
+                        <span class="step-number">6</span>
+                        <span class="step-command">bash Requirements.sh</span>
+                        <span class="step-copy"><i class="fas fa-copy"></i></span>
+                    </div>
+                    <div class="step-item" onclick="copyCommand('bash Main.sh')">
+                        <span class="step-number">7</span>
+                        <span class="step-command">bash Main.sh</span>
+                        <span class="step-copy"><i class="fas fa-copy"></i></span>
+                    </div>
+                </div>
+
+                <!-- Terminal Preview (exact commands) -->
+                <div class="terminal-box">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot dot-red"></div>
+                            <div class="terminal-dot dot-yellow"></div>
+                            <div class="terminal-dot dot-green"></div>
+                        </div>
+                        <div class="terminal-title">termux@evil:~$</div>
+                    </div>
+                    <div class="command-line">
+                        <span class="command-prompt">#</span> apt update && apt upgrade<br>
+                        <span class="command-prompt">#</span> pkg install python<br>
+                        <span class="command-prompt">#</span> pkg install git<br>
+                        <span class="command-prompt">#</span> git clone https://github.com/WhiteSoulEvLF/Termux-Theme.git<br>
+                        <span class="command-prompt">#</span> cd Termux-Theme<br>
+                        <span class="command-prompt">#</span> bash Requirements.sh<br>
+                        <span class="command-prompt">#</span> bash Main.sh
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Footer -->
         <footer style="text-align: center; margin-top: 3rem; padding: 2rem; border-top: 1px solid #a22;">
             <div style="font-family: 'Orbitron', sans-serif; color: #b44;">
-                <i class="fas fa-eye"></i> EVIL TERMUX TOOLS
+                <i class="fas fa-eye"></i> EVIL TERMUX TOOLS • THE EYE COLLECTION
             </div>
             <div style="margin-top: 1rem; color: #a66; font-size: 0.8rem;">
                 © 2026 | FOR EDUCATIONAL PURPOSES ONLY | THE EYE SEES ALL
@@ -828,6 +908,22 @@
             });
         }
 
+        // Copy all Evil Eye Theme commands (exact as requested)
+        function copyAllEvilEye() {
+            const commands = [
+                'apt update && apt upgrade',
+                'pkg install python',
+                'pkg install git',
+                'git clone https://github.com/WhiteSoulEvLF/Termux-Theme.git',
+                'cd Termux-Theme',
+                'bash Requirements.sh',
+                'bash Main.sh'
+            ].join('\n');
+            navigator.clipboard.writeText(commands).then(() => {
+                showNotification('✓ All Evil Eye theme commands copied!');
+            });
+        }
+
         // Show notification
         function showNotification(message) {
             const notif = document.createElement('div');
@@ -843,6 +939,7 @@
         window.copyCommand = copyCommand;
         window.copyAllDevilX = copyAllDevilX;
         window.copyAllHacked = copyAllHacked;
+        window.copyAllEvilEye = copyAllEvilEye;
 
         // Console art (evil)
         console.log('%c🔥 EVIL TERMUX TOOLS 🔥', 'color: #ff4d4d; font-size: 16px; font-family: Orbitron; font-weight: bold; text-shadow: 0 0 10px red;');
